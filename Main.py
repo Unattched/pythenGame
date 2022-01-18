@@ -5,6 +5,7 @@ default_grid: list = [["* " for i in range(0, 10)] for j in range(0, 10)]  # con
 running_grid: list = []
 items: list = ["* ", "c "]  # [path, coin]
 current_item = items[0]  # item player is on (defaults to path)
+responses = ['y', 'n']
 
 
 def display_grid(grid):
@@ -18,9 +19,17 @@ def display_grid(grid):
 
 def interact(item):
     if item == items[0]:
-        return False
+        return items[0]
     else:
-
+        collect = input("Would you like to collect this item? Yes (y) or No (n): ").lower()
+        while collect not in responses:
+            collect = input("Would you like to collect this item? Yes (y) or No (n): ").lower()
+        if collect == responses[0]:
+            inventory.append(item.strip())
+            return items[0]
+        else:
+            r_item = item
+            return r_item
 
 
 def generate_upper_area(grid):
@@ -62,7 +71,7 @@ def movement(x_pos: int, y_pos: int, grid: list):
             current_item = grid[s_y_pos][x_pos]
             grid[s_y_pos][x_pos] = "P "
             display_grid(grid)
-            interact(current_item)
+            current_item = interact(current_item)
         else:
             s_y_pos = len(default_grid[0]) - 1
             grid[y_pos][x_pos] = items[0]
