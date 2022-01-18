@@ -47,6 +47,21 @@ def generate_upper_area(grid):
     grid.append(player_row)
 
 
+def generate_lower_area(grid):
+    player_row = grid[0]
+    grid.clear()
+    grid.append(player_row)
+    for i in range(0, 9):
+        row = []
+        for j in range(0, 10):
+            item_index = random.randint(0, 10)
+            if item_index > 8:
+                row.append(items[1])  # gold coin
+            else:
+                row.append(items[0])  # path
+        grid.append(row)
+
+
 def save(grid):
     pass
 
@@ -77,6 +92,22 @@ def movement(x_pos: int, y_pos: int, grid: list):
             grid[y_pos][x_pos] = items[0]
             grid[s_y_pos][x_pos] = "P "
             generate_upper_area(grid)
+            display_grid(grid)
+        save(grid)
+        movement(x_pos, s_y_pos, grid)
+    elif direction == 'd':
+        if y_pos != 9:
+            s_y_pos = y_pos + 1
+            grid[y_pos][x_pos] = current_item
+            current_item = grid[s_y_pos][x_pos]
+            grid[s_y_pos][x_pos] = "P "
+            display_grid(grid)
+            current_item = interact(current_item)
+        else:
+            s_y_pos = 0
+            grid[y_pos][x_pos] = items[0]
+            grid[s_y_pos][x_pos] = "P "
+            generate_lower_area(grid)
             display_grid(grid)
         save(grid)
         movement(x_pos, s_y_pos, grid)
